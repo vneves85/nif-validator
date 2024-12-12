@@ -14,3 +14,4 @@ Python NIF Validator
 ## Run
 
         docker run -d --name nif-validator -p 8000:9056 vneves85/nif-validator
+
