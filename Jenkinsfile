@@ -77,6 +77,21 @@ pipeline {
                 }
             }
         }
+        stage('Quality Analysis') {
+            parallel {
+                stage('Integration Tests') {
+                    steps {
+                        echo 'Integration tests'
+                    }
+                }
+                stage('User Interface tests') {
+                    steps {
+                        echo 'UI tests'
+                    }
+                }
+            }
+
+        }
 
         stage('Deploy') {
             steps {
