@@ -136,9 +136,11 @@ pipeline {
             echo 'Pipeline completed successfully!'
         }
         failure {
-            mail to: 'vitor@milv.casa',
-            subject: "Failed pipeline: ${currentBuild.fullDisplayName}"
-            body: 'You realy mess things up'
+            mail (
+                to: 'vitor@milv.casa',
+                subject: "Failed pipeline: ${currentBuild.fullDisplayName}"
+                body: 'You realy mess things up'
+            }
         }
     }
 }
