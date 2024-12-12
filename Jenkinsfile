@@ -118,12 +118,6 @@ pipeline {
         }
 
         stage('Deploy') {
-            agent {
-                docker {
-                    image 'python:3.11-slim'
-                    reuseNode true
-                }
-            }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub',
                     passwordVariable:'passwd', usernameVariable:'username')]) {
@@ -142,7 +136,9 @@ pipeline {
             echo 'Pipeline completed successfully!'
         }
         failure {
-            echo 'Pipeline failed. Please check the logs.'
+            mail to: 'vitor@milv.casa',
+            subject: "Failed pipeline: ${currentBuild.fullDisplayName}"
+            body: 'You realy mess things up'
         }
     }
 }
