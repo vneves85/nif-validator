@@ -110,7 +110,7 @@ pipeline {
                         }
                     }
                     steps {
-                        sh 'python3 -m radon cc . -a -s --exclude site-packages'
+                         sh 'python3 -m radon cc . -a -s --exclude site-packages'
                     }
                 }
             }
@@ -118,8 +118,21 @@ pipeline {
         }
 
         stage('Deploy') {
+            agent {
+                docker {
+                    image 'python:3.11-slim'
+                    reuseNode true
+                }
+            }
             steps {
-                echo 'Deploying the application...'
+                withCredentials([usernamePassword(credentialsId: 'docker-hub',
+                    passwordVariable:'passwd', usernameVariable:'username')]) {
+                    sh"""
+                    docker build -t ${username}/nif-validator .
+                    docker login -u ${username} -p ${passwd}
+                    docker push ${username}/nif-validator
+                    """
+                } 
             }
         }
     }
