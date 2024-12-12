@@ -116,17 +116,17 @@ pipeline {
             }
 
         }
-
-        stage('Deploy') {
+        
+        stage('Deliver') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub',
+                withCredentials([usernamePassword(credentialsId: 'dockerHub',
                     passwordVariable:'passwd', usernameVariable:'username')]) {
                     sh"""
                     docker build -t ${username}/nif-validator .
                     docker login -u ${username} -p ${passwd}
                     docker push ${username}/nif-validator
                     """
-                    } 
+                    }
             }
         }
     }
@@ -136,11 +136,9 @@ pipeline {
             echo 'Pipeline completed successfully!'
         }
         failure {
-            mail (
-                to: 'vitor@milv.casa',
-                subject: "Failed pipeline: ${currentBuild.fullDisplayName}"
-                body: 'You realy mess things up'
-            }
+            mail to: 'cfreire@cfreire.com.pt',
+            subject: "Failed pipeline: ${currentBuild.fullDisplayName}",
+            body: "You realy mess things up!"
         }
     }
 }
